@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  leadflowx-scorer:
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/leadflowx
+      - KAFKA_BROKER=kafka:9092
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - leadflowx-network
+    ports:
+      - "8082:8080"
+
+networks:
+  leadflowx-network:
+    external: true
