@@ -1,0 +1,33 @@
+﻿name: CI/CD Pipeline - leadflowx-scorer
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test and Build
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run tests
+      run: python -m pytest tests/
+    
+    - name: Build application
+      run: pip install -r requirements.txt
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to Azure
+      run: |
+        echo "Deploying leadflowx-scorer to Azure containerapp"
